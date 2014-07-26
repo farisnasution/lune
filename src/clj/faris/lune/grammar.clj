@@ -1,6 +1,6 @@
 (ns clj.faris.lune.grammar
   (:require [instaparse.core :as insta])
-  (:use [clojure.string :only [split join]]))
+  (:use [clojure.string :only [join]]))
 
 (def mongo-query-grammar
   (insta/parser
