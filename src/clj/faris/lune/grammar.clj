@@ -1,6 +1,6 @@
 (ns clj.faris.lune.grammar
   (:require [instaparse.core :as insta])
-  (:use [clojure.string :only [join]]))
+  (:use [clojure.string :only [split join]]))
 
 (def mongo-query-grammar
   (insta/parser
@@ -12,24 +12,33 @@
     number = #'[0-9]+'
     alphabet = #'[a-zA-Z]+'
     word = number* alphabet (number* alphabet*)*
-    key = (word | number) (<dot> (word | number))*
+    key = (word | number) (<dot> (word | number))* operator*
     value = (word | number) (<cln> (word | number))*
     pair = key <eq> value <amp>*
-    operator = op+
-    op = #'__[a-zA-Z]+'"))
+    operator = #'__[a-zA-Z]+'"))
+
+(defn process-value-using-operator
+  [value operator]
+  (identity value))
 
 (def transform-mongo-query-grammar
   {:alphabet #(identity %)
    :number #(read-string %)
    :word (fn [& value]
            (join "" value))
+   :operator #(identity %)
    :key (fn [& value]
-          (->> value
-               (join ".")
-               keyword))
+          (reduce (fn [prev-val next-val]
+                    (str prev-val (if (or (empty? prev-val)
+                                          (.startsWith next-val "__"))
+                                    "" ".") next-val)) "" value))
    :value (fn [& value]
             (apply conj [] value))
-   :pair #(hash-map %1 %2)
+   :pair (fn [key value]
+           (let [[key & operator] (split key #"__")
+                 key (keyword key)
+                 value (process-value-using-operator value operator)]
+             (hash-map key value)))
    :expr (fn [& value]
            (apply conj {} value))})
 
