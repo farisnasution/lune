@@ -33,7 +33,9 @@
                                           (.startsWith next-val "__"))
                                     "" ".") next-val)) "" value))
    :value (fn [& value]
-            (apply conj [] value))
+            (if (nil? (next value))
+              (first value)
+              (apply conj [] value)))
    :pair (fn [key value]
            (let [[key & operator] (split key #"__")
                  key (keyword key)
