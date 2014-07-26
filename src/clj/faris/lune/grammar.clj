@@ -15,11 +15,8 @@
     key = (word | number) (<dot> (word | number))*
     value = (word | number) (<cln> (word | number))*
     pair = key <eq> value <amp>*
-    operator = #'__[a-zA-Z]+'"))
-
-;; (def grammar-test
-;;   (insta/parser
-;;    "operator = #'__[a-zA-Z]+'"))
+    operator = op+
+    op = #'__[a-zA-Z]+'"))
 
 (def transform-mongo-query-grammar
   {:alphabet #(identity %)
@@ -40,5 +37,4 @@
   [query-string]
   (->> query-string
        mongo-query-grammar
-       ;; grammar-test
        (insta/transform transform-mongo-query-grammar)))
