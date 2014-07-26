@@ -2,7 +2,7 @@
   (:use [clojure.walk :only [keywordize-keys]]
         [ring.middleware [json :only [wrap-json-body]]]
         [compojure.handler :only [api]]
-        [cljs.faris.lune.util :only [header-value-to-map]]))
+        [clj.faris.lune.util :only [header-value-to-map]]))
 
 (defn keywordize-request-key
   [handler]
