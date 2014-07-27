@@ -32,9 +32,9 @@
                     (str prev-val (if (or (empty? prev-val)
                                           (.startsWith next-val "__"))
                                     "" ".") next-val)) "" value))
-   :value (fn [& value]
-            (if (nil? (next value))
-              (first value)
+   :value (fn [& [head & tails :as value]]
+            (if (nil? tails)
+              head
               (apply conj [] value)))
    :pair (fn [key value]
            (let [[key & operator] (split key #"__")
