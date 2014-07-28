@@ -17,9 +17,26 @@
     pair = key <eq> value <amp>*
     operator = #'__[a-zA-Z]+'"))
 
+(defn keyed-operator
+  [operator]
+  (condp = operator
+    "in" :$in
+    "or" :$or
+    :$random))
+
 (defn process-value-using-operator
   [value operator]
-  (identity value))
+  (let [[head & tails] (reverse operator)]
+    (if (nil? head)
+      value
+      (let [first-operator (keyed-operator head)
+            first-value {first-operator value}]
+        (if (nil? tails)
+          first-value
+          (reduce (fn [prev-value next-value]
+                    (let [current-operator (keyed-operator next-value)
+                          current-value {current-operator prev-value}]
+                      current-value)) first-value tails))))))
 
 (def transform-mongo-query-grammar
   {:alphabet #(identity %)
