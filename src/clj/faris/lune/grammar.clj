@@ -59,7 +59,13 @@
                  value (process-value-using-operator value operator)]
              (hash-map key value)))
    :expr (fn [& value]
-           (apply conj {} value))})
+           (reduce (fn [prev-val [next-key next-val]]
+                     (if (and (contains? prev-val next-key)
+                              (map? next-val))
+                       (let [current-value (next-key prev-val)
+                             new-value (conj current-value next-val)]
+                         (assoc prev-val next-key new-value))
+                       (assoc prev-val next-key next-val))) {} (mapcat identity value)))})
 
 (defn parser
   [query-string]
