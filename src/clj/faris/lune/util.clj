@@ -1,4 +1,5 @@
-(ns clj.faris.lune.util)
+(ns clj.faris.lune.util
+  (:import org.bson.types.ObjectId))
 
 (defn try-to-int
   [some-value]
@@ -17,6 +18,13 @@
   (if (string? value)
     (clojure.string/lower-case value)
     value))
+
+(defn try-to-oid
+  [value]
+  (try (ObjectId. value)
+       (catch IllegalArgumentException error nil)
+       (catch NullPointerException error nil)
+       (catch ClassCastException error nil)))
 
 (defn header-value-to-map
   [string-value]

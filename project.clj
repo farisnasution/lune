@@ -11,7 +11,7 @@
                  [http-kit "2.1.16"]
                  [compojure "1.1.6"]
                  [juggler "0.2.4"]
-                 [com.novemberain/monger "1.7.0"]
+                 [com.novemberain/monger "2.0.0"]
                  [liberator "0.11.0"]]
   :app-settings {:dev {:server {:ip "0.0.0.0"
                                 :port 8080
