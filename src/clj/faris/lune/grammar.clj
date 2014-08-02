@@ -38,7 +38,7 @@
                           current-value {current-operator prev-value}]
                       current-value)) first-value tails))))))
 
-(def transform-mongo-query-grammar
+(def mongo-query-grammar-transformer
   {:alphabet #(identity %)
    :number #(read-string %)
    :word (fn [& value]
@@ -68,7 +68,8 @@
                        (assoc prev-val next-key next-val))) {} (mapcat identity value)))})
 
 (defn parser
-  [query-string]
-  (->> query-string
-       mongo-query-grammar
-       (insta/transform transform-mongo-query-grammar)))
+  [grammar]
+  (fn [query-string]
+    (->> query-string
+         grammar
+         (insta/transform mongo-query-grammar-transformer))))
