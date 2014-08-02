@@ -17,14 +17,14 @@
     pair = key <eq> value <amp>*
     operator = #'__[a-zA-Z]+'"))
 
-(defn keyed-operator
+(defn- keyed-operator
   [operator]
   (condp = operator
     "in" :$in
     "or" :$or
     :$random))
 
-(defn process-value-using-operator
+(defn- process-value-using-operator
   [value operator]
   (let [[head & tails] (reverse operator)]
     (if (nil? head)
