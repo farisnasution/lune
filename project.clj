@@ -13,7 +13,7 @@
                  [juggler "0.2.4"]
                  [com.novemberain/monger "2.0.0"]
                  [liberator "0.11.0"]]
-  :app-settings {:dev {:server {:ip "0.0.0.0"
+  :app-settings {:dev {:server {:ip "127.0.0.1"
                                 :port 8080
                                 :thread 4
                                 :worker-name-prefix "worker-"
