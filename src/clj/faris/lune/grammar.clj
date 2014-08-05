@@ -69,7 +69,11 @@
 
 (defn parser
   [grammar]
-  (fn [query-string]
-    (->> query-string
-         grammar
-         (insta/transform mongo-query-grammar-transformer))))
+  (if-not (= (type grammar) instaparse.core.Parser)
+    (throw (Throwable. (str "Grammar should be a type of instaparse.core.Parser => " (if (nil? grammar)
+                                                                                       "nil"
+                                                                                       (type grammar)))))
+    (fn [query-string]
+      (->> query-string
+           grammar
+           (insta/transform mongo-query-grammar-transformer)))))
