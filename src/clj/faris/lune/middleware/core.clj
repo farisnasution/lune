@@ -2,7 +2,8 @@
   (:use [clojure.walk :only [keywordize-keys]]
         [ring.middleware [json :only [wrap-json-body]]]
         [compojure.handler :only [api]]
-        [clj.faris.lune.util :only [header-value-to-map]]))
+        [clj.faris.lune.util :only [header-value-to-map]]
+        [clj.faris.lune.db :only db]))
 
 (defn keywordize-request-key
   [handler]
@@ -24,3 +25,8 @@
                                                                :else v)])))
           modified-headers (header-modifier header-value-to-map headers)]
       (handler (assoc request :headers modified-headers)))))
+
+(defn attach-db-to-request
+  [handler]
+  (fn [request]
+    (handler (assoc request :db db))))

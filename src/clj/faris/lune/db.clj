@@ -1,18 +1,18 @@
 (ns clj.faris.lune.db
   (:require [monger.core :as mg]))
 
-(defonce db (atom nil))
+(defonce db (atom {}))
 
 (defn connect!
   [{:keys [host port db-name]}]
-  (when (nil? @db)
-    (let [_ (mg/connect! {:host host :port port})
-          current-db (mg/get-db db-name)]
-      (reset! db current-db)
-      (mg/set-db! current-db))))
+  (when (empty? @db)
+    (let [conn (mg/connect {:host host :port port})
+          current-db (mg/get-db conn db-name)]
+      (reset! db {:connection conn
+                  :db current-db}))))
 
 (defn disconnect!
   []
-  (when-not (nil? @db)
-    (mg/disconnect!)
-    (reset! db nil)))
+  (when-not (empty? @db)
+    (mg/disconnect (:connection @db))
+    (reset! db {})))
