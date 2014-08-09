@@ -70,9 +70,10 @@
 (defn parser
   [grammar]
   (if-not (= (type grammar) instaparse.core.Parser)
-    (throw (Throwable. (str "Grammar should be a type of instaparse.core.Parser => " (if (nil? grammar)
-                                                                                       "nil"
-                                                                                       (type grammar)))))
+    (let [message "Grammar should be a type of instaparse.core.Parser."
+          current-grammar-type (str (if (nil? grammar) "nil" (type grammar)))]
+      {:message message
+       :grammar-type current-grammar-type})
     (fn [query-string]
       (->> query-string
            grammar
