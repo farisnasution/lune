@@ -65,7 +65,8 @@
                        (let [current-value (next-key prev-val)
                              new-value (conj current-value next-val)]
                          (assoc prev-val next-key new-value))
-                       (assoc prev-val next-key next-val))) {} (mapcat identity value)))})
+                       (assoc prev-val next-key next-val)))
+                   {} (mapcat identity value)))})
 
 (defn parser
   [grammar]
