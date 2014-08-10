@@ -22,20 +22,24 @@
   (condp = operator
     "in" :$in
     "or" :$or
-    :$random))
+    nil))
 
 (defn- process-value-using-operator
   [value operator]
-  (let [[head & tails] (reverse operator)]
+  (let [[head & tails] (reverse operator)
+        add-operator (fn [parsed-operator value-for-operator]
+                       (if (nil? parsed-operator)
+                         value-for-operator
+                         {parsed-operator value-for-operator}))]
     (if (nil? head)
       value
       (let [first-operator (keyed-operator head)
-            first-value {first-operator value}]
+            first-value (add-operator first-operator value)]
         (if (nil? tails)
           first-value
           (reduce (fn [prev-value next-value]
                     (let [current-operator (keyed-operator next-value)
-                          current-value {current-operator prev-value}]
+                          current-value (add-operator current-operator prev-value)]
                       current-value)) first-value tails))))))
 
 (def mongo-query-grammar-transformer
