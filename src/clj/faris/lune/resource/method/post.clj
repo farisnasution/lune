@@ -7,5 +7,5 @@
             (let [body (:body ctx)
                   headers (-> ctx :request :headers)
                   result (insert-and-return collection-name (pre-factory body))]
-              {:rsc (post-factory result)}))
-   :handle-created :rsc})
+              {:result (post-factory result)}))
+   :handle-created :result})
