@@ -6,5 +6,7 @@
   {:can-put-to-missing? false
    :put! (fn [ctx]
            (let [headers (-> ctx :request :headers)
-                 value (factory (:body ctx) headers)]
+                 body (:body ctx)
+                 entity (:entity ctx)
+                 value (factory (into entity body))]
              (update-by-id collection-name id value)))})
