@@ -1,6 +1,4 @@
-(ns clj.faris.lune.resource.core
-  (:require [monger [query :as mq]]))
+(ns clj.faris.lune.resource.core)
 
-(defn media-types
-  []
-  {:available-media-types "application/json"})
+(def media-types
+  {:available-media-types ["application/json"]})
