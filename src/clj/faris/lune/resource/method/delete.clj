@@ -3,9 +3,9 @@
                                    remove-by-id]]]))
 
 (defn delete-entity-handler
-  [collection-name id]
+  [collection-name id factory]
   {:delete! (fn [ctx]
-              (let [entity (:entity ctx)
+              (let [entity (factory (:entity ctx))
                     deleted (:deleted entity)]
                 (if (or (false? deleted) (nil? deleted))
                   (update-by-id collection-name id (assoc entity :deleted true))
