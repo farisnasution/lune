@@ -41,3 +41,7 @@
          (catch IllegalArgumentException error string-value)
          (catch ClassCastException error string-value)
          (catch NullPointerException error nil))))
+
+(defn init-insertable
+  [doc]
+  (assoc doc :date-created (java.util.Date.) :deleted false))
